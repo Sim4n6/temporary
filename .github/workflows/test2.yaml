@@ -41,7 +41,7 @@ jobs:
                   --label 'commit-queue' \
                   --json 'number' \
                   #--search "created:<=$(date --date="2 days ago"  +"%Y-%m-%dT%H:%M:%S%z")" \
-                  -t '{{ range . }}{{ .number }} {{ end }}' \
+                  #-t '{{ range . }}{{ .number }} {{ end }}' \
                   --limit 100)
           echo $prs
           fast_track_prs=$(gh pr list \
