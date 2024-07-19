@@ -5,6 +5,8 @@ on:
 
   merge_group:
 
+  workflow_dispatch:
+
 jobs:
   changes:
     name: Check for relevant changes
