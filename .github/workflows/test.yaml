@@ -79,9 +79,6 @@ jobs:
           echo "" > .gitmodules
           rm -rf content/*
           cd content
-          # list first
-          git ls-remote --heads https://github.com/gravitational/teleport
-
           # Add a submodule at docs/content/teleport
           git submodule add --force -b $BRANCH -- https://github.com/gravitational/teleport
           cd $GITHUB_WORKSPACE/docs
