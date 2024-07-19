@@ -64,7 +64,7 @@ jobs:
         run: |
           if [ $GITHUB_EVENT_NAME = "pull_request" ]; then
             BRANCH=$GITHUB_HEAD_REF;
-          elif [ $GITHUB_EVENT_NAME = "merge_group" ]; then
+          elif [ $GITHUB_EVENT_NAME = "workflow_dispatch" ]; then
             # GitHub populates $GITHUB_REF with:
             # refs/heads/gh-readonly-queue/<base branch>/pr-<PR number>-<SHA>
             #
