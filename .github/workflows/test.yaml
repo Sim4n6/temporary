@@ -35,8 +35,8 @@ jobs:
 
   doc-tests:
     name: Lint (Docs)
-    needs: changes
-    if: ${{ !startsWith(github.head_ref, 'dependabot/') && needs.changes.outputs.changed == 'true' }}
+    #needs: changes
+    #if: ${{ !startsWith(github.head_ref, 'dependabot/') && needs.changes.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
 
     permissions:
