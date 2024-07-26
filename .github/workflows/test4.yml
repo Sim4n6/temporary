@@ -31,8 +31,7 @@ jobs:
         if: >-
           ${{
           github.repository == 'Sim4n6/temporary' &&
-          !startsWith(github.event_name, 'pull') &&
-          steps.diff.outputs.update
+          !startsWith(github.event_name, 'pull') 
           }}
 
       - uses: ./.github/actions/slack
