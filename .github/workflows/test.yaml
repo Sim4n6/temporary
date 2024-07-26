@@ -62,7 +62,7 @@ jobs:
         # of gravitational/teleport. We override this in order to build only a
         # single version of the docs.
         run: |
-          if [ $GITHUB_EVENT_NAME = "workflow_dispatch" ]; then
+          if [ $GITHUB_EVENT_NAME = "pull_request" ]; then
             BRANCH=$GITHUB_HEAD_REF;
           elif [ $GITHUB_EVENT_NAME = "merge_group" ]; then
             # GitHub populates $GITHUB_REF with:
