@@ -1,8 +1,9 @@
 name: Integration Tests
 on:
-  schedule:
+  workflow_dispatch:
+  #schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: '*/2 * * * *' # run integration tests at 3 AM, monday to friday (1-5)
+    #- cron: '*/2 * * * *' # run integration tests at 3 AM, monday to friday (1-
 
   workflow_dispatch: # run integration tests only when triggered manually
     inputs:
