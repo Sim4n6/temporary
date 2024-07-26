@@ -34,30 +34,30 @@ jobs:
             job: test
             profile: release
             skip_pr: true
-          - os: '${{ github.repository == ''denoland/deno'' && ''windows-2022-xl'' || ''windows-2022'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'' }}'
             job: test
             profile: debug
-          - os: '${{ github.repository == ''denoland/deno'' && ''windows-2022-xl'' || ''windows-2022'' }}'
-            runner: '${{ github.event_name == ''pull_request'' && ''windows-2022'' || (github.repository == ''denoland/deno'' && ''windows-2022-xl'' || ''windows-2022'') }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'' }}'
+            runner: '${{ github.event_name == ''pull_request'' && ''windows-2022'' || (github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'') }}'
             job: test
             profile: release
             skip_pr: true
-          - os: '${{ github.repository == ''denoland/deno'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
             job: test
             profile: release
             use_sysroot: true
             wpt: '${{ !startsWith(github.ref, ''refs/tags/'') }}'
-          - os: '${{ github.repository == ''denoland/deno'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
             job: bench
             profile: release
             use_sysroot: true
             skip_pr: '${{ !contains(github.event.pull_request.labels.*.name, ''ci-bench'') }}'
-          - os: '${{ github.repository == ''denoland/deno'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
             job: test
             profile: debug
             use_sysroot: true
             wpt: '${{ github.ref == ''refs/heads/main'' && !startsWith(github.ref, ''refs/tags/'') }}'
-          - os: '${{ github.repository == ''denoland/deno'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
             job: lint
             profile: debug
       fail-fast: '${{ github.event_name == ''pull_request'' || (github.ref != ''refs/heads/main'' && !startsWith(github.ref, ''refs/tags/'')) }}'
@@ -97,7 +97,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (startsWith(matrix.os, 'ubuntu') &&
           matrix.profile == 'release' &&
           matrix.job == 'test' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           startsWith(github.ref, 'refs/tags/')))
         run: |-
           mkdir -p target/release
@@ -131,7 +131,7 @@ jobs:
       - if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.profile == 'release' &&
           matrix.job == 'test' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' ||
           startsWith(github.ref, 'refs/tags/'))))
         name: Authenticate with Google Cloud
@@ -146,7 +146,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os != 'Windows' &&
           matrix.profile == 'release' &&
           matrix.job == 'test' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' ||
           startsWith(github.ref, 'refs/tags/'))))
         uses: google-github-actions/setup-gcloud@v1
@@ -157,7 +157,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os == 'Windows' &&
           matrix.profile == 'release' &&
           matrix.job == 'test' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' ||
           startsWith(github.ref, 'refs/tags/'))))
         uses: google-github-actions/setup-gcloud@v1
@@ -169,7 +169,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main'))
         run: echo "DENO_CANARY=true" >> $GITHUB_ENV
       - if: '!(github.event_name == ''pull_request'' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != ''true'' && (matrix.use_sysroot))'
@@ -309,7 +309,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && ((matrix.job == 'test' || matrix.job == 'bench') &&
           matrix.profile == 'release' && (matrix.use_sysroot ||
-          (github.repository == 'denoland/deno' &&
+          (github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' ||
           startsWith(github.ref, 'refs/tags/'))))))
         run: cargo build --release --locked --all-targets
@@ -317,7 +317,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'test' &&
           matrix.profile == 'release' && (matrix.use_sysroot ||
-          (github.repository == 'denoland/deno' &&
+          (github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' ||
           startsWith(github.ref, 'refs/tags/'))))))
         uses: actions/upload-artifact@v3
@@ -329,7 +329,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (startsWith(matrix.os, 'ubuntu') &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno'))
+          github.repository == 'sim4n6/temporary'))
         run: |-
           cd target/release
           zip -r deno-x86_64-unknown-linux-gnu.zip deno
@@ -339,7 +339,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (startsWith(matrix.os, 'macOS') &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))))
         run: |-
           cd target/release
@@ -349,7 +349,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (startsWith(matrix.os, 'windows') &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))))
         shell: pwsh
         run: Compress-Archive -CompressionLevel Optimal -Force -Path target/release/deno.exe -DestinationPath target/release/deno-x86_64-pc-windows-msvc.zip
@@ -358,7 +358,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os != 'Windows' &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main'))
         run: 'gsutil -h "Cache-Control: public, max-age=3600" cp ./target/release/*.zip gs://dl.deno.land/canary/$(git rev-parse HEAD)/'
       - name: Upload canary to dl.deno.land (windows)
@@ -366,7 +366,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os == 'Windows' &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main'))
         env:
           CLOUDSDK_PYTHON: '${{env.pythonLocation}}\python.exe'
@@ -391,7 +391,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'test' && matrix.profile == 'release' &&
           (matrix.use_sysroot || (
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')))))
         run: cargo test --release --locked
       - name: Check deno binary
@@ -441,7 +441,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.wpt &&
           runner.os == 'Linux' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')))
         run: |-
           gzip ./wptreport.json
@@ -455,7 +455,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.wpt &&
           runner.os == 'Linux' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')))
         env:
           WPT_FYI_USER: deno
@@ -470,7 +470,7 @@ jobs:
       - name: Post Benchmarks
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'bench' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')))
         env:
           DENOBOT_PAT: '${{ secrets.DENOBOT_PAT }}'
@@ -487,7 +487,7 @@ jobs:
           git commit --message "Update benchmarks"
           git push origin gh-pages
       - name: Build product size info
-        if: '!(github.event_name == ''pull_request'' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != ''true'' && (matrix.job != ''lint'' && matrix.profile != ''debug'' && github.repository == ''denoland/deno'' && (github.ref == ''refs/heads/main'' || startsWith(github.ref, ''refs/tags/''))))'
+        if: '!(github.event_name == ''pull_request'' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != ''true'' && (matrix.job != ''lint'' && matrix.profile != ''debug'' && github.repository == ''sim4n6/temporary'' && (github.ref == ''refs/heads/main'' || startsWith(github.ref, ''refs/tags/''))))'
         run: |-
           du -hd1 "./target/${{ matrix.profile }}"
           du -ha  "./target/${{ matrix.profile }}/deno"
@@ -501,7 +501,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os != 'Windows' &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           startsWith(github.ref, 'refs/tags/')))
         run: 'gsutil -h "Cache-Control: public, max-age=3600" cp ./target/release/*.zip gs://dl.deno.land/release/${GITHUB_REF#refs/*/}/'
       - name: Upload release to dl.deno.land (windows)
@@ -509,7 +509,7 @@ jobs:
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os == 'Windows' &&
           matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           startsWith(github.ref, 'refs/tags/')))
         env:
           CLOUDSDK_PYTHON: '${{env.pythonLocation}}\python.exe'
@@ -518,7 +518,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           startsWith(github.ref, 'refs/tags/')))
         run: |-
           export PATH=$PATH:$(pwd)/target/release
@@ -528,7 +528,7 @@ jobs:
         if: |-
           !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (matrix.job == 'test' &&
           matrix.profile == 'release' &&
-          github.repository == 'denoland/deno' &&
+          github.repository == 'sim4n6/temporary' &&
           startsWith(github.ref, 'refs/tags/')))
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -556,7 +556,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - build
-    if: github.repository == 'denoland/deno' && github.ref == 'refs/heads/main'
+    if: github.repository == 'sim4n6/temporary' && github.ref == 'refs/heads/main'
     steps:
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
