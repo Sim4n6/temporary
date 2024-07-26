@@ -58,7 +58,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   commitQueue:
-    needs: get_mergeable_prs
+    # needs: get_mergeable_prs
     if: needs.get_mergeable_prs.outputs.numbers != ''
     runs-on: ubuntu-latest
     steps:
