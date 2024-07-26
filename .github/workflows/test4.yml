@@ -1,0 +1,40 @@
+name: Misc
+on: [push, pull_request, merge_group]
+
+concurrency:
+  group: ${{ github.workflow }} / ${{ startsWith(github.event_name, 'pull') && github.ref_name || github.sha }}
+  cancel-in-progress: ${{ startsWith(github.event_name, 'pull') }}
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Miscellaneous checks
+
+    permissions:
+      contents: write # for Git to git push
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Commit
+        run: |
+          git pull --ff-only origin ${GITHUB_REF#refs/heads/}
+          git commit --message="Update default gems list at ${GITHUB_SHA:0:30} [ci skip]" NEWS.md
+          git push origin ${GITHUB_REF#refs/heads/}
+        env:
+          EMAIL: svn-admin@ruby-lang.org
+          GIT_AUTHOR_NAME: git
+          GIT_COMMITTER_NAME: git
+        if: >-
+          ${{
+          github.repository == 'Sim4n6/temporary' &&
+          !startsWith(github.event_name, 'pull') 
+          }}
+
+      - uses: ./.github/actions/slack
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SIMPLER_ALERTS_URL }} # ruby-lang slack: ruby/simpler-alerts-bot
+        if: ${{ failure() }}

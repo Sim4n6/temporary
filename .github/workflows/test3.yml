@@ -1,0 +1,148 @@
+name: Integration Tests
+on:
+  workflow_dispatch:
+  #schedule:
+    # * is a special character in YAML so you have to quote this string
+    #- cron: '*/2 * * * *' # run integration tests at 3 AM, monday to friday (1-
+
+  workflow_dispatch: # run integration tests only when triggered manually
+    inputs:
+      branch:
+        description: 'Take CI build artifacts from branch (e.g., master, release-x.y.z)'
+        required: true
+        default: 'master'
+      examples_branch:
+        description: 'Branch of Keptn examples to use for integration tests (e.g., master, release-x.y.z)'
+        required: true
+        default: 'master'
+env:
+  META_KEPTN_VERSION: 0.8.7
+  META_KEPTN_KEPTN_PROJECT: keptn
+defaults:
+  run:
+    shell: bash
+jobs:
+  integration-test:
+    name: "Tests"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - CLOUD_PROVIDER: "minishift-on-GHA"
+            PLATFORM: "openshift"
+            PLATFORM_VERSION: "3.11"
+            KEPTN_SERVICE_TYPE: "ClusterIP"
+            RUN_QUALITY_GATES_TEST: "false"
+            RUN_CONTINUOUS_DELIVERY_TEST: "false"
+            COLLECT_RESOURCE_LIMITS: "true"
+          - CLOUD_PROVIDER: "k3s-on-GHA"
+            PLATFORM_VERSION: "v1.16.15+k3s1" # see https://github.com/rancher/k3s/releases
+            KUBECONFIG: "/etc/rancher/k3s/k3s.yaml"
+            PLATFORM: "kubernetes"
+            KEPTN_SERVICE_TYPE: "NodePort"
+            RUN_QUALITY_GATES_TEST: "true"
+            RUN_CONTINUOUS_DELIVERY_TEST: "false"
+            COLLECT_RESOURCE_LIMITS: "false"
+          - CLOUD_PROVIDER: "k3s-on-GHA"
+            PLATFORM_VERSION: "v1.21.1+k3s1" # see https://github.com/rancher/k3s/releases
+            KUBECONFIG: "/etc/rancher/k3s/k3s.yaml"
+            PLATFORM: "kubernetes"
+            KEPTN_SERVICE_TYPE: "NodePort"
+            RUN_QUALITY_GATES_TEST: "true"
+            RUN_CONTINUOUS_DELIVERY_TEST: "false"
+            COLLECT_RESOURCE_LIMITS: "false"
+          - CLOUD_PROVIDER: "k3d-on-GHA"
+            PLATFORM_VERSION: "v4.4.6" # see https://github.com/rancher/k3d/releases
+            KUBECONFIG: ""
+            PLATFORM: "kubernetes"
+            KEPTN_SERVICE_TYPE: "NodePort"
+            RUN_AIRGAPPED_TEST: "true"
+            RUN_QUALITY_GATES_TEST: "false"
+            RUN_CONTINUOUS_DELIVERY_TEST: "false"
+            COLLECT_RESOURCE_LIMITS: "false"
+          - CLOUD_PROVIDER: "GKE"
+            PLATFORM_VERSION: "1.18"
+            KUBECONFIG: ""
+            PLATFORM: "kubernetes"
+            KEPTN_SERVICE_TYPE: "LoadBalancer"
+            RUN_QUALITY_GATES_TEST: "true"
+            RUN_CONTINUOUS_DELIVERY_TEST: "true"
+            REMOTE_EXECUTION_PLANE: "true"
+            COLLECT_RESOURCE_LIMITS: "false"
+          - CLOUD_PROVIDER: "GKE"
+            PLATFORM_VERSION: "1.19"
+            KUBECONFIG: ""
+            PLATFORM: "kubernetes"
+            KEPTN_SERVICE_TYPE: "LoadBalancer"
+            RUN_QUALITY_GATES_TEST: "true"
+            RUN_CONTINUOUS_DELIVERY_TEST: "true"
+            REMOTE_EXECUTION_PLANE: "false"
+            COLLECT_RESOURCE_LIMITS: "true"
+    env:
+      CLOUD_PROVIDER: ${{ matrix.CLOUD_PROVIDER }}
+      PLATFORM: ${{ matrix.PLATFORM }}
+      PLATFORM_VERSION: ${{ matrix.PLATFORM_VERSION }}
+      KUBECONFIG: ${{ matrix.KUBECONFIG }}
+      KEPTN_NAMESPACE: "keptn-test"
+      KEPTN_SERVICE_TYPE: ${{ matrix.KEPTN_SERVICE_TYPE }}
+      RUN_CONTINUOUS_DELIVERY_TEST: ${{ matrix.RUN_CONTINUOUS_DELIVERY_TEST }}
+      RUN_AIRGAPPED_TEST: ${{ matrix.RUN_AIRGAPPED_TEST }}
+      REMOTE_EXECUTION_PLANE: ${{ matrix.REMOTE_EXECUTION_PLANE }}
+      RUN_QUALITY_GATES_TEST: ${{ matrix.RUN_QUALITY_GATES_TEST }}
+      KEPTN_EXAMPLES_BRANCH: ${{ github.event.inputs.examples_branch }}
+      COLLECT_RESOURCE_LIMITS: ${{ matrix.COLLECT_RESOURCE_LIMITS }}
+      GO_VERSION: ^1.16
+    outputs:
+      BRANCH: ${{ steps.determine_branch.outputs.BRANCH }}
+      ARTIFACT_RUN_ID: ${{ steps.last_run_id.outputs.RUN_ID }}
+    steps:
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Check out code.
+        uses: actions/checkout@v2.3.4
+
+      - name: Create downloads folder
+        run: mkdir ~/downloads
+
+      - name: Cache downloads paths
+        uses: actions/cache@v2.1.6
+        with:
+          path: |
+            ~/downloads
+          key: ${{ runner.os }}-${{ matrix.CLOUD_PROVIDER }}-downloads
+
+      # This step is supposed to determine the target branch where to download the build-artifacts from
+      - name: Determine Target Branch for Integration Tests
+        id: determine_branch
+        run: |
+          if [[ "${{ github.event.inputs.branch }}" != "" ]]; then
+            # branch was manually set by user -> probably a workflow_dispatch action
+            BRANCH=${{ github.event.inputs.branch }}
+            echo "Using $BRANCH as target branch for integration tests"
+          else
+            echo "Determining branch based on what triggered this workflow"
+
+            if [[ "${GITHUB_REF}" == "refs/heads"* ]]; then
+              echo "This is a push to a local branch -> using branch name"
+              BRANCH=${GITHUB_REF#refs/heads/}
+              echo "Branch Name: $BRANCH"
+            else
+              if [[ "${GITHUB_REF}" == "refs/pull/"* ]]; then
+                # usually the format for PRs is: refs/pull/1234/merge
+                echo "::error::This is a Pull Request, and PRs are not supported yet"
+                exit 1
+              else
+                echo "::error This is neither a push, nor a PR, probably something else... Exiting"
+                exit 1
+              fi
+            fi
+          fi
+
+          echo "##[set-output name=BRANCH;]$(echo ${BRANCH})"
+
+   
