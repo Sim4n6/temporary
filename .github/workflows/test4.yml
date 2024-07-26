@@ -30,9 +30,8 @@ jobs:
           GIT_COMMITTER_NAME: git
         if: >-
           ${{
-          github.repository == 'ruby/ruby' &&
-          !startsWith(github.event_name, 'pull') &&
-          steps.diff.outputs.update
+          github.repository == 'Sim4n6/temporary' &&
+          !startsWith(github.event_name, 'pull') 
           }}
 
       - uses: ./.github/actions/slack
