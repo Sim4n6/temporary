@@ -88,7 +88,7 @@ jobs:
 
           # Initialize the Google Cloud SDK
           echo "Initializing Google Cloud SDK..."
-          ./google-cloud-sdk/bin/gcloud init --skip-diagnostics
+          ./google-cloud-sdk/bin/gcloud init --skip-diagnostics --no-browser --console-only
 
           # Add gsutil to the PATH by updating .bashrc
           echo "Adding gsutil to PATH..."
