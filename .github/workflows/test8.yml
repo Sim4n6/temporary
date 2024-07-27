@@ -45,8 +45,21 @@ jobs:
           echo "branch=$REF" >> $GITHUB_OUTPUT
           echo "base=$BASE_SHA" >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
-      - name: force vue modification
-        run: echo "vue_modified=1" >> $GITHUB_OUTPUT
+      - name: Check vue changes
+        id: vuecheck
+        run: |
+          git fetch --depth=1 origin ${{ steps.vars.outputs.base }}
+
+          VUE_FILES_MODIFIED=$(git diff --name-only ${{ steps.vars.outputs.base }} -- plugins/*/vue/**/* plugins/CoreVue/types package-lock.json | wc -l)
+
+          if [[ $VUE_FILES_MODIFIED == "0" ]]
+          then
+            echo "No vue files modified"
+            exit 0;
+          fi
+
+          echo "vue_modified=1" >> $GITHUB_OUTPUT
+        if: steps.vars.outputs.branch != ''
         
       - name: Prepare git config
         run: |
