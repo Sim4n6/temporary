@@ -27,21 +27,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-12
-            job: test
-            profile: debug
-          - os: macos-12
-            job: test
-            profile: release
-            skip_pr: true
-          - os: '${{ github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'' }}'
-            job: test
-            profile: debug
-          - os: '${{ github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'' }}'
-            runner: '${{ github.event_name == ''pull_request'' && ''windows-2022'' || (github.repository == ''sim4n6/temporary'' && ''windows-2022-xl'' || ''windows-2022'') }}'
-            job: test
-            profile: release
-            skip_pr: true
+
           - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
             job: test
             profile: release
