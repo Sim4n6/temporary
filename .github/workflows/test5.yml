@@ -14,9 +14,6 @@ on:
       - reopened
       - synchronize
       - ready_for_review
-concurrency:
-  group: '${{ github.workflow }}-${{ !contains(github.event.pull_request.labels.*.name, ''ci-test-flaky'') && github.head_ref || github.run_id }}'
-  cancel-in-progress: true
 jobs:
   build:
     name: '${{ matrix.job }} ${{ matrix.profile }} ${{ matrix.os }}'
@@ -29,12 +26,12 @@ jobs:
       matrix:
         include:
 
-          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary''  }}'
             job: test
             profile: release
             use_sysroot: true
             wpt: '${{ !startsWith(github.ref, ''refs/tags/'') }}'
-          - os: '${{ github.repository == ''sim4n6/temporary'' && ''ubuntu-22.04-xl'' || ''ubuntu-22.04'' }}'
+          - os: '${{ github.repository == ''sim4n6/temporary'' }}'
             job: bench
             profile: release
             use_sysroot: true
