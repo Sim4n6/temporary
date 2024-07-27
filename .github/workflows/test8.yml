@@ -27,7 +27,7 @@ jobs:
 
           PR_INFO=$( curl \
                    --request GET \
-                   --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+                   --header 'authorization: Bearer ${{ secrets.TOKEN }}' \
                    --header 'content-type: application/json' \
                    --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR )
           REF=$(echo "${PR_INFO}" | jq -r .head.ref)
