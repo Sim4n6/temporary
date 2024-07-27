@@ -44,4 +44,4 @@ jobs:
           echo "islocalbranch=$(expr $BASE == $GITHUB_REPOSITORY)" >> $GITHUB_OUTPUT
           echo "branch=$REF" >> $GITHUB_OUTPUT
           echo "base=$BASE_SHA" >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
+          c/home/runner/work/_temp/_runner_file_commands/set_output_00b446e0-fd94-4d7f-85fc-7268b342b6bfat $GITHUB_OUTPUT
