@@ -48,15 +48,15 @@ jobs:
       - name: Check vue changes
         id: vuecheck
         run: |
-          git fetch --depth=1 origin ${{ steps.vars.outputs.base }}
+          #git fetch --depth=1 origin ${{ steps.vars.outputs.base }}
 
-          VUE_FILES_MODIFIED=$(git diff --name-only ${{ steps.vars.outputs.base }} -- plugins/*/vue/**/* plugins/CoreVue/types package-lock.json | wc -l)
+          #VUE_FILES_MODIFIED=$(git diff --name-only ${{ steps.vars.outputs.base }} -- plugins/*/vue/**/* plugins/CoreVue/types package-lock.json | wc -l)
 
-          if [[ $VUE_FILES_MODIFIED == "0" ]]
-          then
-            echo "No vue files modified"
-            exit 0;
-          fi
+          #if [[ $VUE_FILES_MODIFIED == "0" ]]
+          #then
+          #  echo "No vue files modified"
+          #  exit 0;
+          #fi
 
           echo "vue_modified=1" >> $GITHUB_OUTPUT
         if: steps.vars.outputs.branch != ''
