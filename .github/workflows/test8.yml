@@ -44,7 +44,9 @@ jobs:
           echo "islocalbranch=$(expr $BASE == $GITHUB_REPOSITORY)" >> $GITHUB_OUTPUT
           echo "branch=$REF" >> $GITHUB_OUTPUT
           echo "base=$BASE_SHA" >> $GITHUB_OUTPUT
-
+      - name: force vue modification
+        run: echo "vue_modified=1" >> $GITHUB_OUTPUT
+        
       - name: Prepare git config
         run: |
           cat <<- EOF > $HOME/.netrc
