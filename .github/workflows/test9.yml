@@ -45,6 +45,7 @@ jobs:
           done;
 
           echo "LABELS=${labels::-1}" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
 
       - name: Add labels
         env:
