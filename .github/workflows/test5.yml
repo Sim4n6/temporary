@@ -66,12 +66,6 @@ jobs:
       RUST_BACKTRACE: full
     steps:
       - name: Upload release to dl.deno.land (unix)
-        if: |-
-          !(github.event_name == 'pull_request' && matrix.skip_pr) && (steps.exit_early.outputs.EXIT_EARLY != 'true' && (runner.os != 'Windows' &&
-          matrix.job == 'test' &&
-          matrix.profile == 'release' &&
-          github.repository == 'sim4n6/temporary' &&
-          startsWith(github.ref, 'refs/tags/')))
         run: 'gsutil -h "Cache-Control: public, max-age=3600" cp ./target/release/*.zip gs://dl.deno.land/release/${GITHUB_REF#refs/*/}/'
       - name: Upload release to dl.deno.land (windows)
         if: |-
