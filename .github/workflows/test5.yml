@@ -65,6 +65,44 @@ jobs:
       CARGO_TERM_COLOR: always
       RUST_BACKTRACE: full
     steps:
+      - name: install gsutil
+        run: | 
+          # Define the URL and filename for the Google Cloud SDK
+          SDK_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-441.0.0-linux-x86_64.tar.gz";
+          SDK_FILENAME="google-cloud-sdk-441.0.0-linux-x86_64.tar.gz"
+
+          # Download the Google Cloud SDK
+          echo "Downloading Google Cloud SDK..."
+          curl -O $SDK_URL
+
+          # Extract the downloaded archive
+          echo "Extracting Google Cloud SDK..."
+          tar -xvf $SDK_FILENAME
+
+          # Remove the downloaded archive to save space
+          rm $SDK_FILENAME
+
+          # Install the Google Cloud SDK
+          echo "Installing Google Cloud SDK..."
+          ./google-cloud-sdk/install.sh
+
+          # Initialize the Google Cloud SDK
+          echo "Initializing Google Cloud SDK..."
+          ./google-cloud-sdk/bin/gcloud init
+
+          # Add gsutil to the PATH by updating .bashrc
+          echo "Adding gsutil to PATH..."
+          echo 'export PATH=$PATH:$HOME/google-cloud-sdk/bin' >> $HOME/.bashrc
+
+          # Reload .bashrc to apply changes to the current session
+          source $HOME/.bashrc
+
+          # Verify the installation
+          echo "Verifying gsutil installation..."
+          gsutil version
+
+          echo "Installation complete. gsutil is now available."
+
       - name: Upload release to dl.deno.land (unix)
         run: 'gsutil -h "Cache-Control: public, max-age=3600" cp ./target/release/*.zip gs://dl.deno.land/release/${GITHUB_REF#refs/*/}/'
       - name: Upload release to dl.deno.land (windows)
