@@ -13,6 +13,11 @@ jobs:
     outputs:
       head_ref: ${{ steps.comment-branch.outputs.head_ref }}
 
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+
     steps:
 
 
