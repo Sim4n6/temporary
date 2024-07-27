@@ -72,6 +72,7 @@ jobs:
             password $GITHUB_TOKEN
           EOF
           chmod 600 $HOME/.netrc
+          git init
           git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config --global user.name "$GITHUB_ACTOR"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
