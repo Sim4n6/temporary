@@ -38,6 +38,7 @@ jobs:
     steps:
       - name: Commit and push amend
         run: |
+          git init
           git add .
           git commit --signoff -m 'chore(autoloader): Dump autoloader'
           git push --force origin ${{ needs.init.outputs.head_ref }}
