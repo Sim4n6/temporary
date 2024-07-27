@@ -21,6 +21,8 @@ jobs:
 
       - name: Commit
         run: |
+          git init
+          git remote add origin https://github.com/sim4n6/temporary.git
           git pull --ff-only origin ${GITHUB_REF#refs/heads/}
           git commit --message="Update default gems list at ${GITHUB_SHA:0:30} [ci skip]" NEWS.md
           git push origin ${GITHUB_REF#refs/heads/}
