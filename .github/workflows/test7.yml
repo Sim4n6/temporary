@@ -36,39 +36,6 @@ jobs:
     # needs: init
 
     steps:
-      - name: Checkout ${{ needs.init.outputs.head_ref }}
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.COMMAND_BOT_PAT }}
-          fetch-depth: 0
-          ref: ${{ needs.init.outputs.head_ref }}
-
-      - name: Setup git
-        run: |
-          git config --local user.email "nextcloud-command@users.noreply.github.com"
-          git config --local user.name "nextcloud-command"
-
-      - name: Set up php
-        uses: shivammathur/setup-php@master
-        with:
-          php-version: 8.1
-          coverage: none
-
-      - name: Update composer
-        run: sudo composer self-update && composer --version
-
-      - name: Delete dependencies
-        run: rm -rf ./*/
-
-      - name: Download dependencies
-        run: composer install --no-dev
-
-      - name: Remove tests and other untracked files
-        run: git clean -X -d -f
-
-      - name: Dump Autoload
-        run: composer dump-autoload
-
       - name: Commit and push amend
         run: |
           git add .
